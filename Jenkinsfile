@@ -12,7 +12,7 @@ pipeline {
       }
       stage('Package') {
          steps {
-            echo "Building $1.0.${BUILDS_THIS_YEAR}"
+            echo "Building 1.0.${BUILDS_THIS_YEAR}"
             sh script: './mvnw package -DskipTests'
          }
       }

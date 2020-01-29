@@ -1,17 +1,13 @@
 pipeline {
    agent {
-      label 'docker' 
+      docker {
+         image 'maven:3-alpine' 
+         args '-v /root/.m2:/root/.m2' 
+      }
    }
 
    stages {
       stage('Compile') {
-         agent {
-               docker {
-               label 'docker'
-               image 'maven:3-alpine' 
-               args '-v /root/.m2:/root/.m2' 
-            }
-         }
          steps {
             git 'https://github.com/shohnn/master-salle-ci.git'
             sh 'mvn compile'

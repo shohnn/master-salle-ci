@@ -1,20 +1,29 @@
 pipeline {
-   agent any
+   agent {
+      docker {
+         image 'maven:3-alpine' 
+         args '-v /root/.m2:/root/.m2' 
+      }
+   }
 
    stages {
-      stage('Compile & Test') {
+      stage('Compile') {
          steps {
-            echo 'Hello From Jenkinsfile'
-            //TEST PUSH 6
             git 'https://github.com/shohnn/master-salle-ci.git'
-            sh label: '', script: './mvnw compile test'
+            sh 'mvn compile'
+         }
+      }
+
+      stage('Test') {
+         steps {
+            sh 'mvn test'
             junit 'target/surefire-reports/*.xml'
          }
       }
+
       stage('Package') {
          steps {
-            //echo "Building 1.0.${BUILDS_THIS_YEAR}"
-            sh script: './mvnw package -DskipTests'
+            sh script: 'mvn package -DskipTests clean package'
          }
       }
    }

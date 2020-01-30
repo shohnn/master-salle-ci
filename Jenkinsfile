@@ -36,24 +36,10 @@ pipeline {
          }
       }
       stage('Staging') {
-         agent {
-            label 'master'
-         }
+         agent any
          steps {
-            sh script: '''
-               docker rm -f code-with-quarkus || true
-
-               docker build \
-                  -f src/main/docker/Dockerfile.jvm \
-                  -t quarkus/code-with-quarkus .
-
-               docker run \
-                  --name code-with-quarkus \
-                  -d -p 8080:8080 \
-                  quarkus/code-with-quarkus
-
-               docker push quarkus/code-with-quarkus
-            '''
+            sh script: 'which docker'
+            // sh script: './scripts/staging.sh'
          }
       }
    }

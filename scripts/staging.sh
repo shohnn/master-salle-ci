@@ -11,4 +11,4 @@ docker run \
     -d -p 8080:8080 \
     quarkus/code-with-quarkus
 
-docker push uarkus/code-with-quarkus
+docker push quarkus/code-with-quarkus

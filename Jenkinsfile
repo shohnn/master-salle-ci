@@ -10,13 +10,13 @@ pipeline {
    stages {
       stage('Compile & Test') {
          steps {
-            sh 'mvn clean compile test'
+            sh script: 'mvn clean compile test'
             junit 'target/surefire-reports/*.xml'
          }
       }
       stage('Code Quality') {
          steps {
-            sh 'mvn pmd:check'
+            sh script: 'mvn pmd:check'
          }
       }
       stage('Integration Tests & Coverage') {
@@ -40,7 +40,20 @@ pipeline {
             label 'master'
          }
          steps {
-               sh './scripts/staging.sh'
+            sh script: '''
+               docker rm -f code-with-quarkus || true
+
+               docker build \
+                  -f src/main/docker/Dockerfile.jvm \
+                  -t quarkus/code-with-quarkus .
+
+               docker run \
+                  --name code-with-quarkus \
+                  -d -p 8080:8080 \
+                  quarkus/code-with-quarkus
+
+               docker push quarkus/code-with-quarkus
+            '''
          }
       }
    }

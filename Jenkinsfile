@@ -21,6 +21,11 @@ pipeline {
       }
       stage('Integration Tests & Coverage') {
          steps {
+            sh script: 'mvn verify'
+         }
+      }
+      stage('Package') {
+         steps {
             sh script: 'mvn package -DskipTests'
          }
       }

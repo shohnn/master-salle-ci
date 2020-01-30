@@ -37,9 +37,7 @@ pipeline {
       }
       stage('Staging') {
          steps {
-            sh 'echo "Docker:"'
-            sh 'which docker'
-            // sh script: './scripts/staging.sh'
+            sh script: './scripts/staging.sh'
          }
       }
    }

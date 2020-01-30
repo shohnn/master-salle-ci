@@ -7,23 +7,20 @@ pipeline {
    }
 
    stages {
-      stage('Compile') {
+      stage('Compile & Test') {
          steps {
-            git 'https://github.com/shohnn/master-salle-ci.git'
-            sh 'mvn compile'
-         }
-      }
-
-      stage('Test') {
-         steps {
-            sh 'mvn test'
+            sh 'mvn clean compile test'
             junit 'target/surefire-reports/*.xml'
          }
       }
-
-      stage('Package') {
+      stage('Code Quality') {
          steps {
-            sh script: 'mvn package -DskipTests clean package'
+            sh 'mvn pmd:check'
+         }
+      }
+      stage('Integration Tests & Coverage') {
+         steps {
+            sh script: 'mvn package -DskipTests'
          }
       }
    }

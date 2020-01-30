@@ -1,18 +1,14 @@
 pipeline {
    agent {
-      label 'docker'
+      docker {
+         image 'maven:3-alpine' 
+         args '-v /root/.m2:/root/.m2' 
+         reuseNode true
+      }
    }
-   // Test webhook with new docker updated hook. tests
+
    stages {
       stage('Compile & Test') {
-         agent {
-         docker {
-               label 'docker'
-               image 'maven:3-alpine' 
-               args '-v /root/.m2:/root/.m2' 
-               reuseNode true
-            }
-         }
          steps {
             sh script: 'mvn clean compile test'
             junit 'target/surefire-reports/*.xml'
@@ -23,7 +19,6 @@ pipeline {
             sh script: 'mvn pmd:check'
          }
       }
-      //Test changes
       stage('Integration Tests & Coverage') {
          steps {
             sh script: 'mvn verify'

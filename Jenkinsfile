@@ -35,5 +35,18 @@ pipeline {
             sh script: 'mvn package -DskipTests'
          }
       }
+      stage('Staging') {
+            steps {
+                sh './scripts/staging.sh'
+            }
+        }
+   }
+
+   post {
+      failure {
+         mail to: 'menchaca8808@gmail.com',
+            subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+            body: "Something is wrong with ${env.BUILD_URL}"
+      }
    }
 }

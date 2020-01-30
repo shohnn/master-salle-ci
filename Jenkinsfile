@@ -6,7 +6,7 @@ pipeline {
          reuseNode true
       }
    }
-   // Test webhook with new docker updated hook. test
+   // Test webhook with new docker updated hook. tests
    stages {
       stage('Compile & Test') {
          steps {

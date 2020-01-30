@@ -11,11 +11,7 @@ pipeline {
       stage('Compile & Test') {
          steps {
             sh 'mvn clean compile test'
-         }
-         post {
-            always {
-               junit 'target/surefire-reports/*.xml'
-            }
+            junit 'target/surefire-reports/*.xml'
          }
       }
       stage('Code Quality') {
@@ -26,11 +22,12 @@ pipeline {
       stage('Integration Tests & Coverage') {
          steps {
             sh script: 'mvn verify'
-         }
-         post {
-            always {
-               publishCoverage adapters: [jacocoAdapter('/target/site/jacoco/jacoco.xml')]
-            } 
+            jacoco ( 
+               execPattern: 'target/*.exec',
+               classPattern: 'target/classes',
+               sourcePattern: 'src/main/java',
+               exclusionPattern: 'src/test*'
+            )
          }
       }
       stage('Package') {

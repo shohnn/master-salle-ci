@@ -36,9 +36,9 @@ pipeline {
          }
       }
       stage('Staging') {
-         agent any
          steps {
-            sh script: 'which docker'
+            sh 'echo "Docker:"'
+            sh 'which docker'
             // sh script: './scripts/staging.sh'
          }
       }

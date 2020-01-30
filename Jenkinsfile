@@ -36,10 +36,13 @@ pipeline {
          }
       }
       stage('Staging') {
-            steps {
-                sh './scripts/staging.sh'
-            }
-        }
+         agent {
+            label 'master'
+         }
+         steps {
+               sh './scripts/staging.sh'
+         }
+      }
    }
 
    post {

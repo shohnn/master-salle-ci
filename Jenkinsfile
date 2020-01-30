@@ -11,7 +11,11 @@ pipeline {
       stage('Compile & Test') {
          steps {
             sh 'mvn clean compile test'
-            junit 'target/surefire-reports/*.xml'
+         }
+         post {
+            always {
+               junit 'target/surefire-reports/*.xml'
+            }
          }
       }
       stage('Code Quality') {
@@ -22,6 +26,11 @@ pipeline {
       stage('Integration Tests & Coverage') {
          steps {
             sh script: 'mvn verify'
+         }
+         post {
+            always {
+               publishCoverage adapters: [jacocoAdapter('/target/site/jacoco/jacoco.xml')]
+            } 
          }
       }
       stage('Package') {
